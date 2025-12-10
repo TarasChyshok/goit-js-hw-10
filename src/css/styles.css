@@ -35,13 +35,13 @@
   background: #f64747;
 }
 
-#datetime-picker {
-  display: flex;
-  align-items: center; /* Center align items vertically */
-  justify-content: space-between; /* Add space between input and button */
-  flex-direction: row;
-  gap: 8px;
+.izitoast {
+  background-color: #EF4040;
+  border-color:#FFBEBE;
+}
 
+#datetime-picker {
+  outline: none;
   margin-top: 36px;
   margin-left: 156px;
   border-color: #808080;
@@ -71,7 +71,7 @@ button {
   justify-content: center;
   flex-direction: row;
   gap: 10px;
-
+margin-left:8px;
   border-radius: 8px;
 padding: 8px 16px;
 width: 75px;
@@ -101,6 +101,16 @@ button:disabled{
   height: 72px;
 }
 
+
+.timer .field .label{
+  font-weight: 400;
+  font-size: 16px;
+
+  /* line-height: 24px; */ 
+  line-height: 1.5;
+  color: #2e2f42;
+}
+
 span{
   text-align: center;
   
@@ -114,7 +124,7 @@ flex-direction: column;
 gap: 0px;
 }
 
-span.value{
+.field .value{
   font-family: "Montserrat", sans-serif;
   font-weight: 400;
   font-size: 40px;
@@ -125,7 +135,7 @@ letter-spacing: 0.04em;
 color: #2e2f42;
 }
 
-span.label{
+.field .label{
   font-weight: 400;
 font-size: 16px;
 
