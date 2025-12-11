@@ -1,23 +1,9 @@
-/* *
-  |============================
-  | include css partials with
-  | default @import url()
-  |============================
-*/
+
 /* Common styles */
 @import url('./reset.css');
 @import url('./base.css');
 @import url('./container.css');
 @import url('./animations.css');
-
-/* Sections style */
-@import url('./header.css');
-@import url('./vite-promo.css');
-@import url('./badges.css');
-@import url('./back-link.css');
-@import url('./footer.css');
-
-
 
 .event {
   position: absolute;
@@ -26,7 +12,6 @@
   border-radius: 150px;
   bottom: 3px;
   left: calc(50% - 1.5px);
-  content: " ";
   display: block;
   background: #3d8eb9;
 }
@@ -42,8 +27,6 @@
 
 #datetime-picker {
   outline: none;
-  margin-top: 36px;
-  margin-left: 156px;
   border-color: #808080;
   width: 272px;
   height: 40px;
@@ -71,7 +54,6 @@ button {
   justify-content: center;
   flex-direction: row;
   gap: 10px;
-margin-left:8px;
   border-radius: 8px;
 padding: 8px 16px;
 width: 75px;
@@ -89,14 +71,22 @@ button:disabled{
   color: #989898;
 }
 
+.container{
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.wrap {
+  display: flex;
+  gap:8px;
+}
+
 .timer{
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
   flex-direction: row;
   gap: 24px;
-  margin-top:32px;
-  margin-left:156px;
   width: 346px;
   height: 72px;
 }
@@ -155,11 +145,6 @@ color: #2e2f42;
 
 .currentYear{
   margin-bottom:24px;
-}
-
-.form {
-  margin-top: 36px;
-  margin-left: 156px;
 }
 
 .form>label{

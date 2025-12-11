@@ -3,54 +3,76 @@ import iziToast from "izitoast";
 // Додатковий імпорт стилів
 import "izitoast/dist/css/iziToast.min.css";
 
+const formSubmit = document.querySelector("form.form");
+console.log(formSubmit);
 
+formSubmit.addEventListener("submit", (event) => {
 
-const input = document.querySelector("input[value='fulfilled']");
-console.log(input);
-const buttonSubmit = document.querySelector("button[type='submit'");
-console.log(buttonSubmit);
+    const inputFulfilled = document.querySelector("form.form").querySelector("input[value='fulfilled']");
+    const inputRejected = document.querySelector("form.form").querySelector("input[value='rejected']");
 
-
-buttonSubmit.addEventListener("submit", function (event) {
-
-    const delay = document.querySelector("form.form").delay.value;
-    console.log(delay);
-
-    const shouldResolveFunction = () => {if(input.checked === true){return true} else if(document.querySelector("input[value='rejected']")){return false} else {console.log("if isn't work")}};
+    event.preventDefault();
+    let delay = document.querySelector("form.form").delay.value;
+    delay = parseInt(delay);
      
-    console.log(shouldResolveFunction);
-    const delayPromise = document.querySelector("input[name='delay']").value;
-    console.log(delayPromise);
-    const promise = ((value, delayPromise, shouldResolveFunction) => {
+    const resolveFunctionInPromise = (delay) => {
+        iziToast
+            .success({
+        messageColor:"white",
+        titleColor:"white",
+        backgroundColor:"#EF4040",
+        iconUrl: "../img/icomoon/PNG/error.png",
+        message: `✅ Fulfilled promise in ${delay}ms`,
+        class: 'izitoast',
+        timeout:3000,
+        position:"topRight",
+        resetOnHover: true,
+        icon: 'material-icons',
+        transitionIn: 'flipInX',
+        transitionOut: 'flipOutX',
+        onOpening: function(){
+        console.log(`✅ Fulfilled promise in ${delay}ms`);
+        }
+    })};
+    
+    const rejectFunctionInPromise = (delay) => {
+        iziToast
+            .error({
+        messageColor:"white",
+        titleColor:"white",
+        backgroundColor:"#EF4040",
+        iconUrl: "../img/icomoon/PNG/error.png",
+        message: `✅ Fulfilled promise in ${delay}ms`,
+        class: 'izitoast',
+        timeout:3000,
+        position:"topRight",
+        resetOnHover: true,
+        icon: 'material-icons',
+        transitionIn: 'flipInX',
+        transitionOut: 'flipOutX',
+        onOpening: function(){
+            console.log(`❌ Rejected promise in ${delay}ms`);
+        }
+    })  
+    };
+
+    const promisFunction = () => {
         return new Promise((resolve, reject) => {
             setTimeout(() => {
-                    if(shouldResolveRes === true) {
-                        resolve(iziToast.success({
-                            title:"Error",
-                            messageColor:"white",
-                            titleColor:"white",
-                            backgroundColor:"#EF4040",
-                            iconUrl: "../img/icomoon/PNG/error.png",
-                            message: `✅ Fulfilled promise in ${delay}ms`,
-                            class: 'izitoast',
-                            timeout: 10000,
-                            position:"topRight",
-                            resetOnHover: true,
-                            icon: 'material-icons',
-                            transitionIn: 'flipInX',
-                            transitionOut: 'flipOutX',
-                            onOpening: function(){
-                                console.log('callback abriu!');}
-                    }))
-                    } else if(shouldResolveFunction === false) {
-                        reject( iziToast.warning({
-                            message: `❌ Rejected promise in ${delay}ms`,
-                        }))
-                    } else {
-                        console.log("promise's if isn't works");
+                    if(inputFulfilled.checked) {
+                        resolve(delay);
+                        console.log("fulfilled if");
+                        console.log(resolve(delay));
+                    } else if(inputRejected.checked) {
+                        reject(delay);
+                        console.log("rejected if");
+                        console.log(reject(delay));
                     }
-                }, delayPromise);
-          });
-    });
-    console.log(promise);
-});
+                    }, delay);
+          }).then((delay) => {resolveFunctionInPromise}).catch((delay) => {rejectFunctionInPromise});
+        }
+        promisFunction();
+});   
+
+
+

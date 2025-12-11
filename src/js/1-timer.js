@@ -69,8 +69,10 @@ function convertMs(ms) {
     // flatpickr.currentYear.classList.add("currentYear");
   },
   onValueUpdate: function(selectedDates, dateStr, instance){
+    calendar.close();
+    document.querySelector("[data-start]").disabled = false;
     if(calendar.selectedDates[0]<Date.now()){
-      calendar.close();
+      document.querySelector("[data-start]").disabled = true;
       iziToast.error({
         title:"Error",
         messageColor:"white",
@@ -108,7 +110,7 @@ const timer = {
   intervalId: null,
   isActive:false,
   start() {
-    if(this.isActive){return}
+    if(this.isActive){return} else {
     document.querySelector("[data-start]").disabled = true;
     this.isActive = true;
     let selectedDates = calendar.selectedDates;
@@ -127,7 +129,7 @@ const timer = {
       console.log(currentTime);
       console.log(diff);
       console.log(result);
-    }, 1000)
+    }, 1000)}
   },
 
   stop(){if(!this.isActive) return;
