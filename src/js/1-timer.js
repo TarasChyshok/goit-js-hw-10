@@ -26,24 +26,6 @@ function convertMs(ms) {
     return { days, hours, minutes, seconds };
   }
 
-  const iziToastConfig = {
-    tittle:"Error",
-    message: "Illegal operation",
-    class: 'izitoast',
-    timeout: 10000,
-    position:"topRight",
-    resetOnHover: true,
-    icon: 'material-icons',
-    transitionIn: 'flipInX',
-    transitionOut: 'flipOutX',
-    onOpening: function(){
-        console.log('callback abriu!');
-    },
-    onClosing: function(){
-        console.log("callback fechou!");
-    }
-  }
-
   const input = document.querySelector("#datetime-picker");
   const options = {
     enableTime: true,
@@ -52,23 +34,7 @@ function convertMs(ms) {
     minuteIncrement: 1,
     mode: "single",
     dateFormat: "Y-m-dTH:i",
-  onOpen: [
-      function(selectedDates, dateStr, instance){
-  
-      },
-      function(selectedDates, dateStr, instance){
-  
-      }
-  ],
   onClose: function(selectedDates, dateStr, instance){
-    
-  },
-
-  onReady: function(selectedDates, dateStr, instance){
-    // flatpickr.calendarContainer.classList.add("calendar");
-    // flatpickr.currentYear.classList.add("currentYear");
-  },
-  onValueUpdate: function(selectedDates, dateStr, instance){
     calendar.close();
     document.querySelector("[data-start]").disabled = false;
     if(calendar.selectedDates[0]<Date.now()){
@@ -80,28 +46,13 @@ function convertMs(ms) {
         backgroundColor:"#EF4040",
         iconUrl: "../img/icomoon/PNG/error.png",
         message: "Illegal operation",
-        class: 'izitoast',
-        timeout: 10000,
+        timeout: 5000,
         position:"topRight",
-        resetOnHover: true,
-        icon: 'material-icons',
         transitionIn: 'flipInX',
         transitionOut: 'flipOutX',
-        onOpening: function(){
-            console.log('callback abriu!');
-        },
-        onClosing: function(){
-            console.log("callback fechou!");
-        }
       });
     }
   },
-  onChange: function(selectedDates, dateStr, instance){
-    // if(selectedDates[0]<Date.now){
-    //   iziToast.error(iziToastConfig).show();
-    //   flatpickr(document.querySelector("#datetime-picker").close());
-    // }
-  }
   };
 
   const calendar = flatpickr(document.querySelector("#datetime-picker"), options);
@@ -115,9 +66,9 @@ const timer = {
     this.isActive = true;
     let selectedDates = calendar.selectedDates;
     let initialTime = selectedDates[0];
-    let currentTime = Date.now();
     this.intervalId = setInterval(() => {
-      const diff = initialTime - currentTime;
+      let currentTime = Date.now();
+      let diff = initialTime - currentTime;
       let result = convertMs(diff);
       document.querySelector("[data-days]").textContent = result.days; //days
       document.querySelector("[data-hours]").textContent = result.hours; //hours
