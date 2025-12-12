@@ -75,11 +75,6 @@ const timer = {
       document.querySelector("[data-minutes]").textContent = result.minutes; //minutes
       document.querySelector("[data-seconds]").textContent = result.seconds; //seconds
       if(diff < 0){this.stop(); }
-      currentTime += 1000;
-      console.log(initialTime);
-      console.log(currentTime);
-      console.log(diff);
-      console.log(result);
     }, 1000)}
   },
 
