@@ -36,7 +36,6 @@ const options = {
   mode: 'single',
   dateFormat: 'Y-m-dTH:i',
   onClose(selectedDates, dateStr, instance) {
-    calendar.close();
     document.querySelector('button[data-start]').disabled = false;
     selectedDates = calendar.selectedDates[0];
     if (selectedDates[0] <= Date.now()) {
