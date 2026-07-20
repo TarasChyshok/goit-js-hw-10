@@ -35,13 +35,13 @@ const options = {
   minuteIncrement: 1,
   mode: 'single',
   dateFormat: 'Y-m-dTH:i',
-  onChange: function (selectedDates, dateStr, instance) {
+  onClose(selectedDates, dateStr, instance) {
     calendar.close();
     document.querySelector('button[data-start]').disabled = false;
     selectedDates = calendar.selectedDates[0];
     if (new Date(selectedDates[0]) <= Date.now()) {
       document.querySelector('[data-start]').disabled = true;
-      selectedDates = fp.selectedDates[0];
+      selectedDates = calendar.selectedDates[0];
       iziToast.error({
         title: 'Error',
         messageColor: 'white',
