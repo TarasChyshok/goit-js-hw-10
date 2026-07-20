@@ -1,92 +1,108 @@
-import flatpickr from "flatpickr";
-import "flatpickr/dist/flatpickr.min.css";
-import iziToast from "izitoast";
-import "izitoast/dist/css/iziToast.min.css";
+import flatpickr from 'flatpickr';
+import 'flatpickr/dist/flatpickr.min.css';
+import iziToast from 'izitoast';
+import 'izitoast/dist/css/iziToast.min.css';
 
-document.querySelectorAll("span.value").forEach((element)=>{
+document.querySelectorAll('span.value').forEach(element => {
   element.textContent.toUpperCase();
-})
+});
 
 function convertMs(ms) {
-    // Number of milliseconds per unit of time
-    const second = 1000;
-    const minute = second * 60;
-    const hour = minute * 60;
-    const day = hour * 24;
-  
-    // Remaining days
-    const days = Math.floor(ms / day);
-    // Remaining hours
-    const hours = Math.floor((ms % day) / hour);
-    // Remaining minutes
-    const minutes = Math.floor(((ms % day) % hour) / minute);
-    // Remaining seconds
-    const seconds = Math.floor((((ms % day) % hour) % minute) / second);
-  
-    return { days, hours, minutes, seconds };
-  }
+  // Number of milliseconds per unit of time
+  const second = 1000;
+  const minute = second * 60;
+  const hour = minute * 60;
+  const day = hour * 24;
 
-  const input = document.querySelector("#datetime-picker");
-  const options = {
-    enableTime: true,
-    time_24hr: true,
-    defaultDate: new Date(),
-    minuteIncrement: 1,
-    mode: "single",
-    dateFormat: "Y-m-dTH:i",
-  onClose: function(selectedDates, dateStr, instance){
+  // Remaining days
+  const days = Math.floor(ms / day);
+  // Remaining hours
+  const hours = Math.floor((ms % day) / hour);
+  // Remaining minutes
+  const minutes = Math.floor(((ms % day) % hour) / minute);
+  // Remaining seconds
+  const seconds = Math.floor((((ms % day) % hour) % minute) / second);
+
+  return { days, hours, minutes, seconds };
+}
+const input = document.querySelector('#datetime-picker');
+let selectedDates;
+const options = {
+  enableTime: true,
+  time_24hr: true,
+  defaultDate: new Date(),
+  minuteIncrement: 1,
+  mode: 'single',
+  dateFormat: 'Y-m-dTH:i',
+  onClose: function (selectedDates) {
     calendar.close();
-    document.querySelector("[data-start]").disabled = false;
-    if(calendar.selectedDates[0]<Date.now()){
-      document.querySelector("[data-start]").disabled = true;
+    document.querySelector('[data-start]').disabled = false;
+    if (new Date(selectedDates[0]) <= Date.now()) {
+      document.querySelector('[data-start]').disabled = true;
+      selectedDates = calendar.selectedDates[0];
       iziToast.error({
-        title:"Error",
-        messageColor:"white",
-        titleColor:"white",
-        backgroundColor:"#EF4040",
-        iconUrl: "../img/icomoon/PNG/error.png",
-        message: "Illegal operation",
+        title: 'Error',
+        messageColor: 'white',
+        titleColor: 'white',
+        backgroundColor: '#EF4040',
+        iconUrl: '../img/icomoon/PNG/error.png',
+        message: 'Please choose a date in the future',
         timeout: 5000,
-        position:"topRight",
+        position: 'topRight',
         transitionIn: 'flipInX',
         transitionOut: 'flipOutX',
       });
     }
   },
-  };
-
-  const calendar = flatpickr(document.querySelector("#datetime-picker"), options);
+};
+const calendar = flatpickr(document.querySelector('#datetime-picker'), options);
 
 const timer = {
   intervalId: null,
-  isActive:false,
+  isActive: false,
   start() {
-    if(this.isActive){return} else {
-    document.querySelector("[data-start]").disabled = true;
-    this.isActive = true;
-    let selectedDates = calendar.selectedDates;
-    let initialTime = selectedDates[0];
-    this.intervalId = setInterval(() => {
-      let currentTime = Date.now();
-      let diff = initialTime - currentTime;
-      let result = convertMs(diff);
-      document.querySelector("[data-days]").textContent = result.days; //days
-      document.querySelector("[data-hours]").textContent = result.hours; //hours
-      document.querySelector("[data-minutes]").textContent = result.minutes; //minutes
-      document.querySelector("[data-seconds]").textContent = result.seconds; //seconds
-      if(diff < 0){this.stop(); }
-    }, 1000)}
+    if (this.isActive) {
+      return;
+    } else {
+      document.querySelector('[data-start]').disabled = true;
+      document.querySelector('#datetime-picker').disabled = true;
+      this.isActive = true;
+      let initialTime = selectedDates[0];
+      this.intervalId = setInterval(() => {
+        let currentTime = Date.now();
+        let diff = initialTime - currentTime;
+        let result = convertMs(diff);
+        document.querySelector('[data-days]').textContent = toString(
+          result.days
+        ).padStart(2, '0'); //days
+        document.querySelector('[data-hours]').textContent = toString(
+          result.hours
+        ).padStart(2, '0'); //hours
+        document.querySelector('[data-minutes]').textContent = toString(
+          result.minutes
+        ).padStart(2, '0'); //minutes
+        document.querySelector('[data-seconds]').textContent = toString(
+          result.seconds
+        ).padStart(2, '0'); //seconds
+        if (diff < 0) {
+          this.stop();
+        }
+      }, 1000);
+    }
   },
 
-  stop(){if(!this.isActive) return;
+  stop() {
+    if (!this.isActive) return;
     clearInterval(this.intervalId);
-    document.querySelector("[data-days]").textContent = "00"; //days
-      document.querySelector("[data-hours]").textContent = "00"; //hours
-      document.querySelector("[data-minutes]").textContent = "00"; //minutes
-      document.querySelector("[data-seconds]").textContent = "00"; //seconds
-  }
-}
+    document.querySelector('[data-days]').textContent = '00'; //days
+    document.querySelector('[data-hours]').textContent = '00'; //hours
+    document.querySelector('[data-minutes]').textContent = '00'; //minutes
+    document.querySelector('[data-seconds]').textContent = '00'; //seconds
+    document.querySelector('[data-start]').disabled = false;
+    document.querySelector('#datetime-picker').disabled = false;
+  },
+};
 
-document.querySelector("[data-start]").addEventListener("click", () => {
+document.querySelector('[data-start]').addEventListener('click', () => {
   timer.start();
 });
