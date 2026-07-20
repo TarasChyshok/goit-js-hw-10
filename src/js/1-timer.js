@@ -39,7 +39,7 @@ const options = {
     calendar.close();
     document.querySelector('button[data-start]').disabled = false;
     selectedDates = calendar.selectedDates[0];
-    if (new Date(selectedDates[0]) <= Date.now()) {
+    if (selectedDates[0] <= Date.now()) {
       document.querySelector('[data-start]').disabled = true;
       selectedDates = calendar.selectedDates[0];
       iziToast.error({
@@ -69,7 +69,7 @@ const timer = {
       document.querySelector('[data-start]').disabled = true;
       document.querySelector('#datetime-picker').disabled = true;
       this.isActive = true;
-      let initialTime = selectedDates[0];
+      let initialTime = selectedDates;
       this.intervalId = setInterval(() => {
         let currentTime = Date.now();
         let diff = initialTime - currentTime;
