@@ -3,6 +3,7 @@ import 'flatpickr/dist/flatpickr.min.css';
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
 
+document.querySelector('button[data-start]').disabled = true;
 document.querySelectorAll('span.value').forEach(element => {
   element.textContent.toUpperCase();
 });
@@ -34,12 +35,13 @@ const options = {
   minuteIncrement: 1,
   mode: 'single',
   dateFormat: 'Y-m-dTH:i',
-  onClose: function (selectedDates) {
+  onChange: function (selectedDates, dateStr, instance) {
     calendar.close();
-    document.querySelector('[data-start]').disabled = false;
+    document.querySelector('button[data-start]').disabled = false;
+    selectedDates = calendar.selectedDates[0];
     if (new Date(selectedDates[0]) <= Date.now()) {
       document.querySelector('[data-start]').disabled = true;
-      selectedDates = calendar.selectedDates[0];
+      selectedDates = fp.selectedDates[0];
       iziToast.error({
         title: 'Error',
         messageColor: 'white',
@@ -72,16 +74,16 @@ const timer = {
         let currentTime = Date.now();
         let diff = initialTime - currentTime;
         let result = convertMs(diff);
-        document.querySelector('[data-days]').textContent = toString(
+        document.querySelector('[data-days]').innerText = String(
           result.days
         ).padStart(2, '0'); //days
-        document.querySelector('[data-hours]').textContent = toString(
+        document.querySelector('[data-hours]').innerText = String(
           result.hours
         ).padStart(2, '0'); //hours
-        document.querySelector('[data-minutes]').textContent = toString(
+        document.querySelector('[data-minutes]').innerText = String(
           result.minutes
         ).padStart(2, '0'); //minutes
-        document.querySelector('[data-seconds]').textContent = toString(
+        document.querySelector('[data-seconds]').innerText = String(
           result.seconds
         ).padStart(2, '0'); //seconds
         if (diff < 0) {
@@ -92,14 +94,14 @@ const timer = {
   },
 
   stop() {
-    if (!this.isActive) return;
+    if (this.isActive === false) return;
     clearInterval(this.intervalId);
     document.querySelector('[data-days]').textContent = '00'; //days
     document.querySelector('[data-hours]').textContent = '00'; //hours
     document.querySelector('[data-minutes]').textContent = '00'; //minutes
     document.querySelector('[data-seconds]').textContent = '00'; //seconds
-    document.querySelector('[data-start]').disabled = false;
     document.querySelector('#datetime-picker').disabled = false;
+    this.isActive = false;
   },
 };
 
