@@ -27,7 +27,7 @@ function convertMs(ms) {
   return { days, hours, minutes, seconds };
 }
 const input = document.querySelector('#datetime-picker');
-let selectedDates;
+let selectedDatesVariable;
 const options = {
   enableTime: true,
   time_24hr: true,
@@ -36,9 +36,8 @@ const options = {
   mode: 'single',
   dateFormat: 'Y-m-dTH:i',
   onClose(selectedDates, dateStr, instance) {
-    document.querySelector('button[data-start]').disabled = false;
-    selectedDates = calendar.selectedDates[0];
-    if (selectedDates[0] <= Date.now()) {
+    selectedDatesVariable = calendar.selectedDates;
+    if (selectedDatesVariable[0] <= Date.now()) {
       document.querySelector('[data-start]').disabled = true;
       selectedDates = calendar.selectedDates[0];
       iziToast.error({
@@ -53,6 +52,8 @@ const options = {
         transitionIn: 'flipInX',
         transitionOut: 'flipOutX',
       });
+    } else {
+      document.querySelector('button[data-start]').disabled = false;
     }
   },
 };
@@ -65,6 +66,9 @@ const timer = {
     if (this.isActive) {
       return;
     } else {
+      if (diff < 0) {
+        return this.stop();
+      }
       document.querySelector('[data-start]').disabled = true;
       document.querySelector('#datetime-picker').disabled = true;
       this.isActive = true;
@@ -85,9 +89,6 @@ const timer = {
         document.querySelector('[data-seconds]').innerText = String(
           result.seconds
         ).padStart(2, '0'); //seconds
-        if (diff < 0) {
-          this.stop();
-        }
       }, 1000);
     }
   },
