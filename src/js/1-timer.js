@@ -1,3 +1,4 @@
+'use strict';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 import iziToast from 'izitoast';
@@ -36,10 +37,10 @@ const options = {
   mode: 'single',
   dateFormat: 'Y-m-dTH:i',
   onClose(selectedDates, dateStr, instance) {
-    selectedDatesVariable = calendar.selectedDates;
     if (selectedDatesVariable[0] <= Date.now()) {
+      selectedDatesVariable = calendar.selectedDates;
       document.querySelector('[data-start]').disabled = true;
-      selectedDates = calendar.selectedDates[0];
+      selectedDatesVariable = calendar.selectedDates[0];
       iziToast.error({
         title: 'Error',
         messageColor: 'white',
@@ -63,20 +64,20 @@ const timer = {
   intervalId: null,
   isActive: false,
   start() {
+    let currentTime = Date.now();
+    let initialTime = selectedDatesVariable;
+    let diff = initialTime - currentTime;
+    let result = convertMs(diff);
     if (this.isActive) {
       return;
     } else {
-      if (diff < 0) {
-        return this.stop();
+      if (diff <= 0) {
+        return timer.stop();
       }
       document.querySelector('[data-start]').disabled = true;
       document.querySelector('#datetime-picker').disabled = true;
       this.isActive = true;
-      let initialTime = selectedDates;
       this.intervalId = setInterval(() => {
-        let currentTime = Date.now();
-        let diff = initialTime - currentTime;
-        let result = convertMs(diff);
         document.querySelector('[data-days]').innerText = String(
           result.days
         ).padStart(2, '0'); //days
@@ -95,13 +96,14 @@ const timer = {
 
   stop() {
     if (this.isActive === false) return;
-    clearInterval(this.intervalId);
+    clearInterval(timer.intervalId);
     document.querySelector('[data-days]').textContent = '00'; //days
     document.querySelector('[data-hours]').textContent = '00'; //hours
     document.querySelector('[data-minutes]').textContent = '00'; //minutes
     document.querySelector('[data-seconds]').textContent = '00'; //seconds
     document.querySelector('#datetime-picker').disabled = false;
     this.isActive = false;
+    timer.intervalId = null;
   },
 };
 
